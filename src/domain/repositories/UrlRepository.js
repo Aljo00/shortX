@@ -4,4 +4,4 @@ class UrlRepository {
   increaseClickCount(shortUrl) {};
 }
 
-exports = UrlRepository;
+export default UrlRepository;
