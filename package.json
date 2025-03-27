@@ -1,0 +1,28 @@
+{
+  "name": "shortx",
+  "version": "1.0.0",
+  "description": "ShortX is a fast and efficient URL shortener built with Node.js, Express.js, and MongoDB, following Clean Architecture. It allows users to shorten long links, create custom aliases, generate QR codes, and track link clicks.",
+  "main": "app.js",
+  "scripts": {
+    "start": "nodemon app.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Aljo00/shortX.git"
+  },
+  "author": "Aljo Joju",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/Aljo00/shortX/issues"
+  },
+  "homepage": "https://github.com/Aljo00/shortX#readme",
+  "dependencies": {
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "mongoose": "^8.13.0",
+    "nanoid": "^5.1.5",
+    "nodemon": "^3.1.9"
+  }
+}
