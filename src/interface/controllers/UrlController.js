@@ -1,6 +1,5 @@
 import ShortenUrlUseCase from "../../application/use-cases/ShortenUrlUseCase.js";
 import RedirectUrlUseCase from "../../application/use-cases/RedirectUrlUseCase.js";
-import ShortenUrlUseCase from "../../application/use-cases/ShortenUrlUseCase.js";
 import UrlService from "../../domain/services/UrlService.js";
 import UrlRepositoryImpl from "../../infrastructure/repositories/UrlRepositoryImpl.js";
 import ShortUrlGeneratorService from "../../infrastructure/services/ShortUrlGeneratorService.js";
