@@ -42,7 +42,7 @@ class UrlController {
   }
 
   static async loadHomePage(req, res) {
-    res.render("index");
+    res.render("home");
   }
 }
 
