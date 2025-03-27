@@ -15,6 +15,10 @@ class UrlService {
     }
     return null;
   }
+
+  async getUrlStats (shortUrl) {
+    return await this.urlRepository.getUrl(shortUrl);
+  }
 }
 
 export default UrlService;
