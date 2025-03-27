@@ -1,63 +1,71 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>ShortX - URL Shortener</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <link rel="stylesheet" href="/css/home.css">
-</head>
-<body>
-    <!-- Navbar -->
-    <nav class="navbar navbar-expand-lg navbar-dark">
-        <div class="container">
-            <a class="navbar-brand" href="/">
-                <i class="fas fa-link"></i> ShortX
-            </a>
-        </div>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"
+    />
+    <link rel="stylesheet" href="/css/home.css" />
+  </head>
+  <body>
+    <nav class="navbar">
+      <div class="container">
+        <a class="navbar-brand" href="/">
+          <i class="fas fa-link"></i> ShortX
+        </a>
+      </div>
     </nav>
 
-    <!-- Hero Section -->
-    <div class="hero-section">
-        <div class="container">
-            <h1 class="text-center mb-4 fade-in">Transform Your Links</h1>
-            <div class="url-shortener-box">
-                <input type="url" id="longUrl" class="form-control" placeholder="Paste your long URL here...">
-                <button id="shortenBtn" class="btn btn-primary">Shorten URL</button>
-            </div>
+    <div class="main-content">
+      <div class="hero-section">
+        <div class="url-container">
+          <h1>Transform Your Long URLs</h1>
+          <div class="url-shortener-box">
+            <input
+              type="url"
+              id="longUrl"
+              class="form-control"
+              placeholder="Paste your long URL here..."
+            />
+            <button id="shortenBtn" class="btn">Shorten URL</button>
+          </div>
         </div>
-    </div>
+      </div>
 
-    <!-- Features Section -->
-    <div class="features-section">
-        <div class="container">
-            <div class="row">
-                <div class="col-md-3 feature-card">
-                    <i class="fas fa-link"></i>
-                    <h3>URL Shortening</h3>
-                    <p>Convert long URLs into short, shareable links instantly</p>
-                </div>
-                <div class="col-md-3 feature-card">
-                    <i class="fas fa-edit"></i>
-                    <h3>Custom Links</h3>
-                    <p>Create personalized short links with custom aliases</p>
-                </div>
-                <div class="col-md-3 feature-card">
-                    <i class="fas fa-qrcode"></i>
-                    <h3>QR Codes</h3>
-                    <p>Generate QR codes for easy mobile sharing</p>
-                </div>
-                <div class="col-md-3 feature-card">
-                    <i class="fas fa-chart-line"></i>
-                    <h3>Analytics</h3>
-                    <p>Track and analyze your link performance</p>
-                </div>
-            </div>
+      <div class="features-container">
+        <div class="row">
+          <div class="feature-card">
+            <i class="fas fa-link"></i>
+            <h3>Quick Shorten</h3>
+            <p>Convert long URLs instantly</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-edit"></i>
+            <h3>Custom URLs</h3>
+            <p>Create custom short links</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-qrcode"></i>
+            <h3>QR Codes</h3>
+            <p>Generate QR codes easily</p>
+          </div>
+          <div class="feature-card">
+            <i class="fas fa-chart-line"></i>
+            <h3>Analytics</h3>
+            <p>Track link performance</p>
+          </div>
         </div>
+      </div>
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <script src="/scripts/home.js"></script>
-</body>
+  </body>
 </html>
