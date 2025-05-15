@@ -1,0 +1,10 @@
+services:
+  - type: web
+    name: shortx
+    env: node
+    plan: free
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: MONGODB_URI
+        value: mongodb+srv://aljojojudev:Do3meuAOQAUGMif5@cluster0.7fb0evv.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0
