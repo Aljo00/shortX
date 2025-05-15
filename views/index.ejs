@@ -1,0 +1,411 @@
+<!DOCTYPE html>
+<html lang="en" >
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShortX - Modern URL Shortener</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* General Styles */
+    :root {
+      /* Dark Theme Base */
+      --background-color: #121212;      /* Deep dark background */
+      --card-background: #1E1E1E;       /* Slightly lighter for cards/sections */
+      --text-color-main: #E0E0E0;       /* Light gray for main text */
+      --text-color-headings: #FFFFFF;  /* Pure white for headings */
+      --text-color-secondary: #A0A0A0;  /* Muted gray for secondary text */
+      --border-color: #383838;         /* Subtle border color for dark theme */
+      --input-background: #2A2A2A;     /* Background for input fields */
+
+      /* Neon Accents */
+      --accent-neon-green: #39FF14;
+      --accent-neon-pink: #F81894;
+
+      /* UI Specifics */
+      --logo-color: var(--accent-neon-pink);
+      --link-color: var(--text-color-main);
+      --link-hover-color: var(--accent-neon-pink);
+      --button-primary-bg: var(--accent-neon-green);
+      --button-primary-text: #000000; /* Black text on neon green for contrast */
+      --button-primary-hover-bg: #2FE012; /* Slightly darker/brighter neon green */
+      --input-focus-glow: rgba(57, 255, 20, 0.5); /* Neon green glow for focus */
+      --error-color: #FF4D4D;           /* Bright red for errors */
+      --success-text-color: var(--accent-neon-green); /* Neon green for success messages */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color-main);
+      background-color: var(--background-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex-grow: 1;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--card-background);
+      padding: 15px 20px;
+      /* box-shadow: 0 2px 4px var(--shadow-color); */
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--logo-color);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+    }
+
+    .nav-links li {
+      margin-left: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--link-color);
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+
+    .nav-links a:hover {
+      color: var(--link-hover-color);
+    }
+
+    /* Hero Section */
+    .hero {
+      background-color: var(--background-color); /* Match body or slightly different dark */
+      padding: 70px 20px; /* Slightly reduced padding */
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .hero-content {
+      max-width: 800px;
+      margin-bottom: 40px;
+    }
+
+    .hero h1 {
+      font-size: 2.8rem;
+      margin-bottom: 20px;
+      color: var(--text-color-headings);
+      font-weight: 700;
+    }
+
+    .hero p {
+      font-size: 1.2rem;
+      margin-bottom: 30px;
+      color: var(--text-color-secondary);
+    }
+
+    /* Form Styles */
+    #urlForm {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 15px;
+      width: 100%;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    #urlForm input[type="url"] {
+      padding: 15px 20px;
+      border: 1px solid var(--border-color);
+      background-color: var(--input-background);
+      color: var(--text-color-main);
+      border-radius: 6px; /* Sharper corners */
+      font-size: 1rem;
+      width: 100%;
+      transition: border-color 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    #urlForm input[type="url"]:focus {
+      outline: none;
+      border-color: var(--accent-neon-green);
+      box-shadow: 0 0 0 0.2rem var(--input-focus-glow);
+    }
+
+    .btn-primary {
+      display: inline-block;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      padding: 15px 30px;
+      border: none;
+      border-radius: 6px; /* Sharper corners */
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      text-decoration: none; /* For links styled as buttons */
+      text-align: center;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--button-primary-hover-bg);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .error-message {
+      color: var(--error-color);
+      font-size: 0.9rem;
+      margin-top: 5px;
+      min-height: 1.2em; /* Reserve space */
+      text-align: left;
+      width: 100%;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 60px 20px;
+      text-align: center;
+      background-color: var(--background-color); /* Section bg same as body */
+    }
+
+    .features-section h2 {
+      font-size: 2rem;
+      margin-bottom: 40px;
+      color: var(--text-color-headings);
+      font-weight: 700;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 30px;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background-color: var(--card-background); /* Cards are distinct */
+      padding: 30px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      /* box-shadow: 0 4px 8px var(--shadow-color); */
+      text-align: left;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+    
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--accent-neon-pink);
+      /* box-shadow: 0 0 10px var(--accent-neon-pink); */
+    }
+
+    .feature-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 10px;
+      color: var(--accent-neon-pink); /* Pink for feature titles */
+      font-weight: 600;
+    }
+    .feature-card p {
+      font-size: 1rem;
+      color: var(--secondary-color);
+    }
+
+    /* About Section */
+    .about-section {
+      padding: 60px 20px;
+      text-align: center;
+      background-color: var(--card-background); /* Make about section a card too */
+      border-radius: 8px;
+      margin: 40px auto; /* Add some margin */
+      max-width: 1000px; /* Constrain width */
+      border: 1px solid var(--border-color);
+    }
+
+    .about-section h2 {
+      font-size: 2rem;
+      margin-bottom: 20px;
+      color: var(--text-color-headings);
+      font-weight: 700;
+    }
+
+    .about-section p {
+      font-size: 1.1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      color: var(--text-color-secondary);
+    }
+
+    /* Footer */
+    footer {
+      background-color: #0D0D0D; /* Even darker footer */
+      color: var(--text-color-secondary);
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+
+    footer p {
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--accent-neon-green);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-links {
+        margin-top: 10px;
+        justify-content: center;
+      }
+
+      .nav-links li {
+        margin: 0 10px;
+      }
+
+      .hero h1 {
+        font-size: 2rem;
+      }
+
+      .hero p {
+        font-size: 1rem;
+      }
+
+      #urlForm {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      #urlForm input[type="url"],
+      .btn-primary {
+        width: 100%;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">ShortX</div>
+    </nav>
+  </header>
+
+  <main>
+    <!-- Hero Section with the Form -->
+    <section class="hero">
+      <div class="hero-content">
+        <h1>Shorten Your Long URLs Effortlessly ✂️</h1>
+        <p>Create clean, memorable links in seconds. Paste your long URL below to get started and share with ease!</p>
+        
+        <form action="/shorten" method="POST" id="urlForm">
+          <input type="url" name="originalUrl" id="originalUrl" placeholder="Enter your long URL here (e.g., https://example.com)" required autocomplete="off" />
+          <div id="errorMessage" class="error-message"></div>
+          <button type="submit" class="btn-primary">Shorten URL</button>
+        </form>
+      </div>
+      <div class="hero-image">
+        <!-- You can add an illustration here if you have one, e.g.: -->
+        <!-- <img src="/images/hero-illustration.svg" alt="URL Shortener Illustration"> -->
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features-section">
+      <h2>Why Choose ShortX?</h2>
+      <div class="features-grid">
+        <div class="feature-card">
+          <!-- <img src="/images/icon-fast.svg" alt="Fast Icon"> -->
+          <h3>Lightning Fast</h3>
+          <p>Shorten URLs in a blink of an eye with our optimized service.</p>
+        </div>
+        <div class="feature-card">
+          <!-- <img src="/images/icon-easy.svg" alt="Easy to Use Icon"> -->
+          <h3>Easy to Use</h3>
+          <p>A simple and intuitive interface, no complicated steps.</p>
+        </div>
+        <div class="feature-card">
+          <!-- <img src="/images/icon-secure.svg" alt="Secure Icon"> -->
+          <h3>Reliable & Secure</h3>
+          <p>Your links are managed securely and reliably.</p>
+        </div>
+        <div class="feature-card">
+            <!-- <img src="/images/icon-analytics.svg" alt="Analytics Icon"> -->
+            <h3>Link Analytics</h3>
+            <p>Track the performance of your shortened links (Coming Soon!).</p>
+          </div>
+      </div>
+    </section>
+
+    <!-- About Section -->
+    <section id="about" class="about-section">
+      <h2>About ShortX</h2>
+      <p>
+        ShortX is a free and easy-to-use URL shortening service. We aim to provide a quick 
+        and efficient way to make long, cumbersome web addresses short and manageable. 
+        Whether you're sharing links on social media, in emails, or anywhere else, 
+        ShortX helps you keep things tidy and professional.
+      </p>
+      </section>
+  </main>
+
+  <footer>
+    <p>© <%= new Date().getFullYear() %> ShortX. Made with <span style="color: var(--accent-neon-pink);">❤️</span> by <a href="https://github.com/aju-mathew" target="_blank">Aju</a>. All rights reserved.</p>
+  </footer>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const urlForm = document.getElementById('urlForm');
+      const originalUrlInput = document.getElementById('originalUrl');
+      const errorMessageDiv = document.getElementById('errorMessage');
+
+      urlForm.addEventListener('submit', (event) => {
+        // Basic client-side validation
+        const url = originalUrlInput.value.trim();
+        if (!url) {
+          errorMessageDiv.textContent = 'Please enter a URL.';
+          event.preventDefault(); // Prevent form submission
+        } else {
+          // Clear previous errors on successful validation
+          errorMessageDiv.textContent = '';
+        }
+      });
+    });
+  </script>
+</body>
+</html>

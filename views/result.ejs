@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>ShortX - Your Short URL</title>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap" rel="stylesheet" />
+  <style>
+    /* General Styles */
+    :root {
+      /* Dark Theme Base */
+      --background-color: #121212;      /* Deep dark background */
+      --card-background: #1E1E1E;       /* Slightly lighter for cards/sections */
+      --text-color-main: #E0E0E0;       /* Light gray for main text */
+      --text-color-headings: #FFFFFF;  /* Pure white for headings */
+      --text-color-secondary: #A0A0A0;  /* Muted gray for secondary text */
+      --border-color: #383838;         /* Subtle border color for dark theme */
+      --input-background: #2A2A2A;     /* Background for input fields */
+
+      /* Neon Accents */
+      --accent-neon-green: #39FF14;
+      --accent-neon-pink: #F81894;
+
+      /* UI Specifics */
+      --logo-color: var(--accent-neon-pink);
+      --link-color: var(--text-color-main);
+      --link-hover-color: var(--accent-neon-pink);
+      --button-primary-bg: var(--accent-neon-green);
+      --button-primary-text: #000000; /* Black text on neon green for contrast */
+      --button-primary-hover-bg: #2FE012; /* Slightly darker/brighter neon green */
+      --error-color: #FF4D4D;           /* Bright red for errors */
+      --success-text-color: var(--accent-neon-green); /* Neon green for success messages */
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      line-height: 1.6;
+      color: var(--text-color-main);
+      background-color: var(--background-color);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    main {
+      flex-grow: 1;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 40px 20px;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+
+    /* Navbar */
+    .navbar {
+      background-color: var(--card-background);
+      padding: 15px 20px;
+      /* box-shadow: 0 2px 4px var(--shadow-color); */
+      border-bottom: 1px solid var(--border-color);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .logo {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--logo-color);
+    }
+
+    .nav-links {
+      list-style: none;
+      display: flex;
+    }
+
+    .nav-links li {
+      margin-left: 20px;
+    }
+
+    .nav-links a {
+      text-decoration: none;
+      color: var(--link-color);
+      font-weight: 600;
+      transition: color 0.3s ease;
+    }
+    .nav-links a:hover {
+      color: var(--link-hover-color);
+    }
+
+    /* Result Section */
+    .result-section {
+      width: 100%;
+      max-width: 900px; /* Increased max-width to accommodate side-by-side cards */
+      text-align: center;
+      margin: 0 auto; /* Center the section */
+    }
+
+    .result-display-area {
+      display: flex;
+      gap: 20px; /* Space between the two cards */
+      align-items: stretch; /* Make cards the same height */
+      margin-bottom: 30px; /* Space before the "Shorten Another" button */
+    }
+
+    .result-card {
+      background-color: var(--card-background);
+      padding: 40px;
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 0 15px -5px var(--accent-neon-pink); 
+      flex: 2; /* Allow link card to take more space */
+      text-align: left; /* Align content to left */
+      /* Optional: Add a subtle neon glow to the card */
+    }
+
+    .result-card h2 {
+      font-size: 2rem;
+      margin-bottom: 30px;
+      color: var(--text-color-headings);
+      font-weight: 700;
+    }
+
+    .result-box {
+      display: flex;
+      gap: 10px;
+      /* margin-bottom: 20px; Removed as QR is now separate */
+      flex-wrap: wrap; /* Allow wrapping on small screens */
+    }
+
+    .result-box input[type="text"] {
+      flex-grow: 1;
+      padding: 15px 20px;
+      border: 1px solid var(--accent-neon-green); /* Green border for the result */
+      background-color: var(--input-background);
+      border-radius: 6px; /* Sharper corners */
+      font-size: 1rem;
+      color: var(--accent-neon-green); /* Green text for the URL */
+      cursor: text;
+      min-width: 150px; /* Ensure input doesn't shrink too much */
+    }
+    .result-box input[type="text"]:focus {
+      outline: none;
+      box-shadow: 0 0 8px var(--accent-neon-green);
+    }
+
+    .qr-display-card {
+      background-color: var(--card-background);
+      padding: 30px; /* Slightly less padding than main card */
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 0 15px -5px var(--accent-neon-green); /* Green glow for QR card */
+      flex: 1; /* QR card takes less space */
+      text-align: center;
+    }
+
+    .qr-display-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 20px;
+      color: var(--text-color-headings);
+      font-weight: 700;
+    }
+
+    .qr-code-container { /* General styling for QR container */
+      text-align: center;
+      margin-top: 15px; /* Space from heading if inside a card */
+    }
+
+
+    .btn-primary {
+      display: inline-block;
+      background-color: var(--button-primary-bg);
+      color: var(--button-primary-text);
+      padding: 15px 30px;
+      border: none;
+      border-radius: 6px; /* Sharper corners */
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background-color 0.3s ease, transform 0.1s ease;
+      text-decoration: none; /* For links styled as buttons */
+      text-align: center;
+    }
+
+    .btn-primary:hover {
+      background-color: var(--button-primary-hover-bg);
+    }
+
+    .btn-primary:active {
+      transform: scale(0.98);
+    }
+
+    .copy-message {
+      /* Styles for the custom toast notification */
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px); /* Initially off-screen */
+      background-color: var(--card-background);
+      color: var(--text-color-main);
+      padding: 12px 25px;
+      border-radius: 6px;
+      border: 1px solid var(--border-color);
+      box-shadow: 0 4px 15px rgba(0,0,0,0.2);
+      z-index: 1000;
+      font-size: 0.95rem;
+      font-weight: 600;
+      opacity: 0;
+      visibility: hidden;
+      transition: opacity 0.3s ease-in-out, transform 0.3s ease-in-out, visibility 0.3s;
+    }
+
+    .copy-message.show {
+      opacity: 1;
+      visibility: visible;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .copy-message.success {
+      border-left: 5px solid var(--success-text-color);
+      color: var(--success-text-color);
+    }
+
+    .copy-message.error {
+      border-left: 5px solid var(--error-color);
+      color: var(--error-color);
+    }
+
+    /* Additional Info Section */
+    .additional-info-section {
+      padding: 40px 20px;
+      text-align: center;
+      background-color: var(--background-color); /* Match body background */
+    }
+
+    .additional-info-section h2 {
+      font-size: 1.8rem; /* Slightly smaller heading than main result */
+      margin-bottom: 30px;
+      color: var(--text-color-headings);
+      font-weight: 700;
+    }
+
+    .info-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Adjust min width */
+      gap: 20px; /* Slightly smaller gap */
+      max-width: 900px; /* Constrain width */
+      margin: 0 auto;
+    }
+
+    .info-card {
+      background-color: var(--card-background);
+      padding: 25px; /* Slightly less padding */
+      border-radius: 8px;
+      border: 1px solid var(--border-color);
+      text-align: left;
+      transition: border-color 0.3s ease;
+    }
+
+    .info-card:hover {
+       border-color: var(--accent-neon-green); /* Green border on hover */
+    }
+
+    .info-card h3 {
+      font-size: 1.2rem; /* Smaller heading */
+      margin-bottom: 10px;
+      color: var(--accent-neon-pink); /* Pink for info titles */
+      font-weight: 600;
+    }
+    .info-card p {
+      font-size: 0.95rem; /* Slightly smaller text */
+      color: var(--text-color-secondary);
+      word-break: break-all; /* Prevent long URLs from overflowing */
+    }
+    /* .info-card .qr-code-container removed as QR is no longer in info-card */
+    
+    /* Generic QR image styling, can be used in .qr-display-card */
+    .qr-code-image {
+      max-width: 150px; /* Larger QR code */
+      height: auto;
+      border: 3px solid var(--accent-neon-green); /* Neon green border */
+      border-radius: 6px;
+      padding: 5px; /* Some padding inside the border */
+      background-color: white; /* Ensure QR is on a white background for scannability */
+      display: block;
+      margin: 0 auto 15px auto; /* Center and add margin below */
+    }
+
+    .btn-secondary { /* For download button */
+      background-color: var(--accent-neon-pink);
+      color: var(--button-primary-text); /* Assuming black text on pink is readable, adjust if not */
+    }
+    .btn-secondary:hover {
+      background-color: #D4147B; /* Darker pink */
+    }
+
+    .back-btn {
+      margin-top: 30px; /* Increased margin for better spacing */
+      display: inline-block; 
+      width: auto; 
+    }
+
+    /* Footer */
+    footer {
+      background-color: #0D0D0D; /* Even darker footer */
+      color: var(--text-color-secondary);
+      text-align: center;
+      padding: 20px;
+      margin-top: 40px;
+    }
+    footer p {
+      font-size: 0.9rem;
+    }
+    footer a {
+      color: var(--accent-neon-green);
+      text-decoration: none;
+    }
+    footer a:hover {
+      text-decoration: underline;
+    }
+
+    /* Responsive Adjustments */
+    @media (max-width: 768px) {
+      .navbar {
+        flex-direction: column;
+        gap: 10px;
+      }
+
+      .nav-links {
+        margin-top: 10px;
+        justify-content: center;
+      }
+
+      .nav-links li {
+        margin: 0 10px;
+      }
+
+      .result-box {
+        flex-direction: column;
+        align-items: stretch;
+      }
+
+      .result-box input[type="text"],
+      .result-box .btn-primary {
+        width: 100%;
+      }
+      .result-display-area {
+        flex-direction: column; /* Stack cards vertically */
+        align-items: stretch; /* Make cards full width */
+      }
+
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <nav class="navbar">
+      <div class="logo">ShortX</div>
+      <ul class="nav-links">
+        <li><a href="/">Home</a></li>
+        <li><a href="/#features">Features</a></li>
+        <li><a href="/#about">About</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <main>
+    <section class="result-section">
+      <div class="result-display-area">
+        <div class="result-card">
+          <h2>Your shortened URL is ready! 🔗</h2>
+          <div class="result-box">
+            <input type="text" id="shortUrl" value="<%= shortUrl %>" readonly aria-label="Shortened URL" onclick="this.select();" />
+            <button class="btn-primary" id="copyBtn">Copy</button>
+          </div>
+          <p style="font-size: 0.9rem; color: var(--text-color-secondary); margin-top: 15px;">
+            Click the input field to select the URL or use the copy button.
+          </p>
+        </div>
+
+        <div class="qr-display-card">
+          <h3>QR Code</h3>
+          <div class="qr-code-container">
+            <img src="https://api.qrserver.com/v1/create-qr-code/?data=<%= shortUrl %>&size=150x150&bgcolor=ffffff&color=000000&qzone=1" 
+                 alt="QR Code for <%= shortUrl %>" 
+                 class="qr-code-image"
+                 id="qrImage"/>
+            <a href="#" id="downloadQrBtn" class="btn-primary btn-secondary" download="shortx-qr.png">Download QR</a>
+          </div>
+        </div>
+      </div>
+      <a href="/" class="btn-primary back-btn">Shorten Another URL</a>
+
+      <!-- Additional Info Section -->
+      <section class="additional-info-section">
+        <h2>More Details</h2>
+        <div class="info-grid">
+          <div class="info-card">
+            <h3>Original URL</h3>
+            <p><%= originalUrl %></p>
+          </div>
+          <div class="info-card">
+            <h3>Link Statistics</h3>
+            <p>Track clicks and more (Coming Soon!)</p>
+          </div>
+        </div>
+      </section>
+    </section>
+  </main>
+
+  <footer>
+    <p>© <%= new Date().getFullYear() %> ShortX. Made with <span style="color: var(--accent-neon-pink);">❤️</span> by <a href="https://github.com/aju-mathew" target="_blank">Aju</a>. All rights reserved.</p>
+  </footer>
+
+  <!-- Custom Notification Element -->
+  <div id="customNotification" class="copy-message">Notification Message</div>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', () => {
+      const copyBtn = document.getElementById('copyBtn');
+      const shortUrlInput = document.getElementById('shortUrl');
+      const downloadQrBtn = document.getElementById('downloadQrBtn');
+      const copyMessageDiv = document.getElementById('copyMessage');
+
+      copyBtn.addEventListener('click', async () => {
+        const notification = document.getElementById('customNotification');
+        let message = '';
+        let type = 'success'; // 'success' or 'error'
+
+        try {
+          // Use the modern Clipboard API
+          await navigator.clipboard.writeText(shortUrlInput.value);
+          message = 'Copied to clipboard!';
+          type = 'success';
+        } catch (err) {
+          message = 'Failed to copy URL.';
+          type = 'error';
+          console.error('Failed to copy: ', err);
+        }
+
+        // Show custom notification
+        notification.textContent = message;
+        notification.className = 'copy-message show'; // Reset classes then add show
+        if (type === 'success') {
+          notification.classList.add('success');
+        } else {
+          notification.classList.add('error');
+        }
+
+        // Hide notification after 3 seconds
+        setTimeout(() => {
+          notification.classList.remove('show');
+        }, 3000);
+      });
+
+      if (downloadQrBtn) {
+        downloadQrBtn.addEventListener('click', () => {
+          downloadQrBtn.href = document.getElementById('qrImage').src + '&format=png'; // Ensure it downloads as png
+        });
+      }
+    });
+  </script>
+</body>
+</html>
