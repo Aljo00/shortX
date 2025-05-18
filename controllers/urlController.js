@@ -11,7 +11,7 @@ async function shortenUrl(req, res) {
     const newUrl = await urlService.createShortUrl(originalUrl);
     res.render("result", {
       originalUrl: newUrl.originalUrl,
-      shortUrl: `http://localhost:${process.env.PORT}/${newUrl.shortCode}`,
+      shortUrl: `https://shortx-yzq9.onrender.com/${newUrl.shortCode}`,
     });
   } catch (error) {
     console.error("Error creating short URL:", error);
